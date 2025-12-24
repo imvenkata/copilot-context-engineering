@@ -1,3 +1,4 @@
+
 ---
 name: code-quality
 description: Improve Python code quality with ruff linting and formatting. Use when lint errors, style issues, or quality improvements are needed.
