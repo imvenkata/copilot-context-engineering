@@ -18,6 +18,44 @@ Operational overhead: Medium–high (run search service + monitor pipelines + in
 
 Cost: Higher (search capacity + optional semantic ranker + embeddings compute; embeddings often the biggest driver).
 
+Side-by-side: GitLab MCP keyword search vs Azure AI Search semantic/hybrid
+Relevance / quality of results
+
+GitLab MCP + keyword search
+
+Pros
+
+Very high precision when the user (or the assistant) knows the right terms: class names, error codes, file paths, config keys.
+
+Natural fit for code search patterns (exact match, regex, etc.). GitLab’s “exact code search” is built on Zoekt and supports exact/regex modes.
+
+No “semantic surprise” results—less chance of pulling conceptually-related-but-wrong snippets.
+
+Cons
+
+Falls down when users ask in natural language: “How do we deploy service X?”, “What’s our standard Terraform pattern for Y?”, “What’s the rollback process?”
+
+The assistant has to guess keywords; when it guesses wrong, recall collapses.
+
+Azure AI Search semantic / hybrid
+
+Pros
+
+Much better recall for natural language, synonyms, and “I don’t know the magic words” queries.
+
+Hybrid queries run full-text + vector in parallel and merge results using Reciprocal Rank Fusion (RRF), which often gives “best of both worlds” behavior.
+
+Optional semantic ranker can re-rank the top results to better match intent (especially for prose). It can also generate captions/answers extracted from your content.
+
+Cons
+
+Semantic ranker is explicitly most beneficial on information-rich prose; it’s not a magic fix for code.
+
+You’ll still want keyword/exact matching for identifiers and precise strings (hybrid helps, but doesn’t eliminate this need).
+
+Practical takeaway: Azure AI Search is most “worth it” when your assistant frequently needs to retrieve docs/issues/decisions/templates across many repos and teams. For pure code search, GitLab’s exact/advanced search often remains the workhorse.
+
+
 
 Development Plan:
 
