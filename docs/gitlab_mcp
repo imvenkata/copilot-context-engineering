@@ -1,0 +1,35 @@
+MCP + GitLab keyword search
+
+Relevance: Best for exact code lookups (identifiers, file paths, error codes). Weak when users ask in natural language or don’t know the right terms.
+
+Implementation effort: Low (already in GitLab + MCP).
+
+Operational overhead: Low (no extra pipelines/index).
+
+Cost: Mostly whatever you already pay for GitLab.
+
+MCP + Azure AI Search (semantic / hybrid)
+
+Relevance: Much better for docs/issues/epics/ADRs/runbooks/templates and “how do we…?” queries. Hybrid keeps keyword precision while adding semantic recall.
+
+Implementation effort: Medium–high (ingestion + chunking + embeddings + permission trimming + sync).
+
+Operational overhead: Medium–high (run search service + monitor pipelines + index lifecycle + tuning/eval).
+
+Cost: Higher (search capacity + optional semantic ranker + embeddings compute; embeddings often the biggest driver).
+
+
+Development Plan:
+
+1. Event-Driven Sync (Webhooks): Configure GitLab System Hooks or Project Webhooks. When a push, issue, or merge_request event occurs, GitLab sends a JSON payload to an Azure Function.
+
+2. The Orchestrator (Azure Function):
+
+  On Create/Update: Triggers your ingestion logic (fetch file content → chunk → embed → upsert to Azure).
+
+  On Delete: Removes the specific document ID from the Azure Index.
+
+3. Scheduled "Deep Crawl" (Reliability): A weekly scheduled task to compare the GitLab repository state with the Azure Index to fix any missed webhook events (drift).
+4. Security & Permissions
+5. Index Schema Enhancements
+6. Integration & Deployment
