@@ -59,6 +59,29 @@ Practical takeaway: Azure AI Search is most “worth it” when your assistant f
 
 Development Plan:
 
+Implementation effort
+
+GitLab MCP + keyword search
+
+Mostly “already done.” GitLab MCP server is designed to securely connect AI tools to GitLab data and operations.
+
+Effort goes into prompting + query strategy (query rewriting, multiple passes, filtering by project/group, etc.), not infra.
+
+Azure AI Search semantic/hybrid
+You’re signing up for a real retrieval platform project:
+
+Ingestion + sync: pull repos/issues/epics/wiki/markdown, handle incremental updates (webhooks or scheduled jobs), deletes, renames, branch strategy.
+
+Chunking strategy: code vs docs vs issues behave differently; chunk size and metadata matter a lot.
+
+Embeddings pipeline: pick model, batch, retry, rate limits; store vectors.
+
+Security trimming: replicate GitLab permissions into the index (group/project membership, confidential issues, etc.).
+
+Schema + ranking tuning: fields, analyzers, boosts, filters, recency weighting.
+
+Azure AI Search does provide first-class support for vector + hybrid retrieval, and a fairly rich feature set for RAG-style retrieval apps.
+
 1. Event-Driven Sync (Webhooks): Configure GitLab System Hooks or Project Webhooks. When a push, issue, or merge_request event occurs, GitLab sends a JSON payload to an Azure Function.
 
 2. The Orchestrator (Azure Function):
@@ -71,3 +94,6 @@ Development Plan:
 4. Security & Permissions
 5. Index Schema Enhancements
 6. Integration & Deployment
+
+
+key word search with+query re-writing
