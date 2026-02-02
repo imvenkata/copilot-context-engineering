@@ -80,3 +80,5 @@ This video provides a practical walkthrough on building specialized AI personas 
 The Problem: LLMs are "polymaths who know everything but understand nothing about your business."
 
 The Impact Point: A prompt is a temporary instruction; Context Engineering is permanent infrastructure.
+
+copilot-instructions.md is tool-specific (owned by GitHub), whereas AGENTS.md is tool-agnostic.
